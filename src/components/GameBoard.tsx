@@ -1,14 +1,16 @@
 'use client';
 import React, { useState } from 'react';
 import Cell from './Cell';
-import { Player } from '../types/inteface';
+import { Player, CellData } from '../types/inteface';
 import Logo from './Logo';
 
 const ROWS = 6;
 const COLS = 7;
 
 const GameBoard: React.FC = () => {
-  const [board, setBoard] = useState<Player[][]>(Array(ROWS).fill(null).map(() => Array(COLS).fill(0)));
+  const [board, setBoard] = useState<CellData[][]>(
+    Array(ROWS).fill(null).map(() => Array(COLS).fill({ player: 0 }))
+  );
   const [currentPlayer, setCurrentPlayer] = useState<Player>(1);
   const [winner, setWinner] = useState<Player>(0);
   const [hoverCol, setHoverCol] = useState<number | null>(null);
@@ -16,13 +18,18 @@ const GameBoard: React.FC = () => {
   const dropDisc = (col: number) => {
     if (winner) return;
 
-    const newBoard = [...board.map(row => [...row])];
+    const newBoard = board.map(row => row.map(cell => ({ ...cell })));
     for (let row = ROWS - 1; row >= 0; row--) {
-      if (newBoard[row][col] === 0) {
-        newBoard[row][col] = currentPlayer;
+      if (newBoard[row][col].player === 0) {
+        newBoard[row][col] = { player: currentPlayer, animate: true };
         setBoard(newBoard);
 
-        if (checkWin(newBoard, row, col, currentPlayer)) {
+        setTimeout(() => {
+          newBoard[row][col].animate = false;
+          setBoard([...newBoard]);
+        }, 300);
+
+        if (checkWin(newBoard.map(r => r.map(c => c.player)), row, col, currentPlayer)) {
           setWinner(currentPlayer);
         } else {
           setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
@@ -62,24 +69,26 @@ const GameBoard: React.FC = () => {
   };
 
   const resetGame = () => {
-    setBoard(Array(ROWS).fill(null).map(() => Array(COLS).fill(0)));
+    setBoard(Array(ROWS).fill(null).map(() => Array(COLS).fill({ player: 0 })));
     setCurrentPlayer(1);
     setWinner(0);
   };
 
   return (
     <div className="flex flex-col items-center space-y-4">
-      <div className="flex flex-row justify-around md:justify-between w-full items-center mb-0">
+      <div className="flex flex-row justify-around md:justify-between w-full items-center md:mb-2">
         <Logo />
-        <button
-          className="mt-4 px-5 py-2 bg-black text-white rounded-full hover:brightness-110 transition-all"
-          onClick={resetGame}
-        >
-          Reiniciar
-        </button>
+        {!winner && (
+          <button
+            className="mt-4 px-5 py-2 bg-black text-white rounded-full hover:brightness-110 transition-all"
+            onClick={resetGame}
+          >
+            Reiniciar
+          </button>
+        )}
       </div>
       {/* INDICADOR DE COLUMNA */}
-      <div className="grid grid-cols-7 gap-4">
+      <div className="grid grid-cols-7 gap-4 ">
         {Array.from({ length: COLS }).map((_, colIdx) => (
           <div key={colIdx} className="flex justify-center items-end h-5 w-14">
             {hoverCol === colIdx && (
@@ -101,15 +110,19 @@ const GameBoard: React.FC = () => {
           >
             {/* FILAS */}
             {Array.from({ length: ROWS }).map((_, rowIdx) => (
-              <Cell key={rowIdx} value={board[rowIdx][colIdx]} />
+              <Cell
+                key={rowIdx}
+                value={board[rowIdx][colIdx].player}
+                animate={board[rowIdx][colIdx].animate}
+              />
             ))}
           </div>
         ))}
       </div>
       {/* TEXTO DE GANADOR Y TURNO */}
       {winner ? (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50">
-          <div className="px-8 w-[400px] h-[300px] flex flex-col items-center justify-center py-4 rounded-3xl border-4 border-black bg-violet-500 text-white font-extrabold text-3xl shadow-[0px_8px_0px_rgba(0,0,0,0.7)] animate-zoom-in-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="pointer-events-auto px-8 w-[400px] h-[300px] flex flex-col items-center justify-center py-4 rounded-3xl border-4 border-black bg-violet-500 text-white font-extrabold text-3xl shadow-[0px_8px_0px_rgba(0,0,0,0.7)] animate-zoom-in-up">
             <Logo />
             <p className='text-4xl mt-5'>¡Jugador {winner} gana!</p>
             <button
@@ -126,8 +139,6 @@ const GameBoard: React.FC = () => {
           Turno del jugador {currentPlayer}
         </div>
       )}
-
-
     </div>
   );
 };
