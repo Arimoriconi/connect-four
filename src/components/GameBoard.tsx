@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Cell from './Cell';
 import { Player } from '../types/inteface';
+import Logo from './Logo';
 
 const ROWS = 6;
 const COLS = 7;
@@ -67,9 +68,9 @@ const GameBoard: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4 mt-5">
-      <div className="flex flex-row justify-between w-full items-center">
-        <h1 className="text-2xl font-bold">Cuatro en Línea</h1>
+    <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-row justify-between w-full items-center mb-0">
+        <Logo />
         <button
           className="mt-4 px-5 py-2 bg-black text-white rounded-full hover:brightness-110 transition-all"
           onClick={resetGame}
@@ -106,9 +107,25 @@ const GameBoard: React.FC = () => {
         ))}
       </div>
       {/* TEXTO DE GANADOR Y TURNO */}
-      <div className="mt-4 bg-pink-400 px-6 py-3 rounded-full border-3 border-black text-white font-bold shadow-[0px_4px_0px_rgba(0,0,0,0.7)]">
-        {winner ? `¡Jugador ${winner} gana!` : `Turno del jugador ${currentPlayer}`}
-      </div>
+      {winner ? (
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50">
+          <div className="px-8 w-[400px] h-[300px] flex flex-col items-center justify-center py-4 rounded-3xl border-4 border-black bg-violet-500 text-white font-extrabold text-3xl shadow-[0px_8px_0px_rgba(0,0,0,0.7)] animate-zoom-in-up">
+            <Logo />
+            <p className='text-4xl mt-5'>¡Jugador {winner} gana!</p>
+            <button
+              className="mt-4 px-5 py-2 bg-black text-xl text-white rounded-full hover:brightness-110 transition-all"
+              onClick={resetGame}
+            >
+              Reiniciar partida
+            </button>
+          </div>
+
+        </div>
+      ) : (
+        <div className="mt-4 bg-pink-400 px-6 py-3 rounded-full border-3 border-black text-white font-bold shadow-[0px_4px_0px_rgba(0,0,0,0.7)]">
+          Turno del jugador {currentPlayer}
+        </div>
+      )}
 
 
     </div>
