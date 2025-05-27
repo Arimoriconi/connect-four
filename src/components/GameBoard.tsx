@@ -69,7 +69,7 @@ const GameBoard: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center space-y-4">
-      <div className="flex flex-row justify-between w-full items-center mb-0">
+      <div className="flex flex-row justify-around md:justify-between w-full items-center mb-0">
         <Logo />
         <button
           className="mt-4 px-5 py-2 bg-black text-white rounded-full hover:brightness-110 transition-all"
@@ -89,7 +89,7 @@ const GameBoard: React.FC = () => {
         ))}
       </div>
       {/* TABLERO */}
-      <div className="grid grid-cols-7 gap-4 bg-white p-4 rounded-3xl shadow-[0px_8px_0px_rgba(0,0,0,0.7)] border-3 border-black">
+      <div className="grid grid-cols-7 gap-2 md:gap-4 bg-white p-3 md:p-4 rounded-3xl shadow-[0px_8px_0px_rgba(0,0,0,0.7)] border-3 border-black">
         {/* COLUMNAS */}
         {Array.from({ length: COLS }).map((_, colIdx) => (
           <div
