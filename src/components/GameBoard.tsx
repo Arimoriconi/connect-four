@@ -40,7 +40,7 @@ const GameBoard: React.FC = () => {
       { dr: 1, dc: -1 },  // Diagonal \
     ];
 
-    for (let { dr, dc } of directions) {
+    for (const { dr, dc } of directions) {
       let count = 1;
 
       for (let step = 1; step < 4; step++) {
