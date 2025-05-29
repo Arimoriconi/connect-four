@@ -92,7 +92,9 @@ const GameBoard: React.FC = () => {
         {Array.from({ length: COLS }).map((_, colIdx) => (
           <div key={colIdx} className="flex justify-center items-end h-5 w-14">
             {hoverCol === colIdx && (
-              <div className="w-6 h-5 bg-pink-400 border-2 border-black rounded-b-full shadow-[0px_3px_0px_rgba(0,0,0,0.2)]" />
+              <Cell
+                value={currentPlayer}
+              />
             )}
           </div>
         ))}

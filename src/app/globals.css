@@ -47,13 +47,13 @@ body {
 
 @keyframes drop {
   0% {
-    transform: translateY(-200%);
-    opacity: 0;
+    /* TO DO: 
+    The drop should be from the indicator chip */
+    transform: translateY(-700%);
   }
 
   100% {
     transform: translateY(0);
-    opacity: 1;
   }
 }
 
