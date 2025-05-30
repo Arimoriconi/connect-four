@@ -1,7 +1,5 @@
+import { ROWS, COLS } from "@/constants/game";
 import { CellData, Player } from "../types/inteface";
-
-export const ROWS = 6;
-export const COLS = 7;
 
 export const createEmptyBoard = (): CellData[][] =>
     Array(ROWS)

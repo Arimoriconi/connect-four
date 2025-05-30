@@ -1,5 +1,6 @@
 import { CellData } from "@/types/inteface";
-import { checkWin, COLS, ROWS } from "./gameUtils";
+import { checkWin } from "./gameUtils";
+import { ROWS, COLS } from "@/constants/game";
 
 const getAvailableRow = (board: CellData[][], col: number): number => {
     for (let row = ROWS - 1; row >= 0; row--) {

@@ -6,9 +6,10 @@ import TurnIndicator from './TurnIndicator';
 import WinnerModal from './WinnerModal';
 import Logo from '../Logo';
 import { CellData, Player } from '../../types/inteface';
-import { checkWin, createEmptyBoard, ROWS, COLS } from '../../lib/gameUtils';
+import { checkWin, createEmptyBoard } from '../../lib/gameUtils';
 import GameModeSelector from './GameModeSelector';
 import { getCpuMove } from '@/lib/cpuUtils';
+import { ROWS, COLS, PLAYER_TWO } from '@/constants/game';
 
 const GameBoard: React.FC = () => {
   const [board, setBoard] = useState<CellData[][]>(createEmptyBoard());
@@ -52,7 +53,7 @@ const GameBoard: React.FC = () => {
 
   // Movimiento de la CPU
   useEffect(() => {
-    if (gameMode === 'cpu' && currentPlayer === 2 && winner === 0) {
+    if (gameMode === 'cpu' && currentPlayer === PLAYER_TWO && winner === 0) {
       const timeout = setTimeout(() => {
         const bestCol = getCpuMove(board);
         dropDisc(bestCol);
@@ -86,7 +87,7 @@ const GameBoard: React.FC = () => {
               key={colIdx}
               columnData={column}
               onClick={() => {
-                if (gameMode === 'cpu' && currentPlayer === 2) return; // 🛑 Bloqueo CPU
+                if (gameMode === 'cpu' && currentPlayer === PLAYER_TWO) return;
                 dropDisc(colIdx);
               }}
               onHover={() => setHoverCol(colIdx)}
